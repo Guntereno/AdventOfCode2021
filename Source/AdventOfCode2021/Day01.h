@@ -22,7 +22,14 @@ protected:
 	void OnPart02ButtonPushed() override;
 
 private:
+	TArray<int32> SampleInput;
+	TArray<int32> PuzzleInput;
+
+	static TArray<int32> LoadInput(const TCHAR* FilePath);
+
 	bool InitTest(const TCHAR* FilePath, TArray<int32>& Values);
-	void RunTestPart01(const TCHAR* FilePath);
-	void RunTestPart02(const TCHAR* FilePath);
+	void RunTestPart01(const TArray<int32>& Values);
+	void RunTestPart02(const TArray<int32>& Values);
+
+	TArray<FString> Lines;
 };

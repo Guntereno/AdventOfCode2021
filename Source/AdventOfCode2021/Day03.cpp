@@ -52,6 +52,7 @@ bool ADay03::LoadInput(const TCHAR* FilePath, FDay03Input& OutResult)
 {
 	FString FullPath = GetAssetPath(FilePath);
 	UE_LOG(LogTemp, Display, TEXT("Loading file '%s'."), *FullPath);
+
 	TArray<FString> Lines;
 	bool bSuccess = FFileHelper::LoadFileToStringArray(Lines, *FullPath);
 	if (!bSuccess)

@@ -1,12 +1,11 @@
-
 #include "Terminal.h"
 
 #include "Components/TextRenderComponent.h"
 
 // Sets default values
 ATerminal::ATerminal():
-	TextRender{ nullptr },
 	MaxLines{ 16 },
+	TextRender{ nullptr },
 	NumLines{ 0 }
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.

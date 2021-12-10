@@ -19,70 +19,60 @@ ADay01::ADay01():
 void ADay01::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SampleInput = LoadInput(TEXT("Data/Day01/Test.txt"));
+	PuzzleInput = LoadInput(TEXT("Data/Day01/Part01.txt"));
 }
 
 void ADay01::OnPart01TestButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day01/Test.txt"));
-	RunTestPart01(*InputPath);
+	RunTestPart01(SampleInput);
 }
 
 void ADay01::OnPart01ButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day01/Part01.txt"));
-	RunTestPart01(*InputPath);
+	RunTestPart01(PuzzleInput);
 }
 
 void ADay01::OnPart02TestButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day01/Test.txt"));
-	RunTestPart02(*InputPath);
+	RunTestPart02(SampleInput);
 }
 
 void ADay01::OnPart02ButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day01/Part01.txt"));
-	RunTestPart02(*InputPath);
+	RunTestPart02(PuzzleInput);
 }
 
-bool ADay01::InitTest(const TCHAR* FilePath, TArray<int32>& Values)
+TArray<int32> ADay01::LoadInput(const TCHAR* FilePath)
 {
-	if ((Terminal == nullptr) || (Counter == nullptr))
-	{
-		return false;
-	}
+	FString FullPath = GetAssetPath(FilePath);
+	UE_LOG(LogTemp, Display, TEXT("Loading file '%s'."), *FullPath);
 
-	Terminal->Clear();
-	Counter->Reset();
-
-	UE_LOG(LogTemp, Warning, TEXT("Loading file '%s'."), FilePath);
 	TArray<FString> Lines;
-	FFileHelper::LoadFileToStringArray(Lines, FilePath);
+	FFileHelper::LoadFileToStringArray(Lines, *FullPath);
 
+	TArray<int32> Values;
 	Values.Empty();
 	for (int i = 0; i < Lines.Num(); ++i)
 	{
 		Values.Emplace(FCString::Atoi(*(Lines[i])));
 	}
 
-	return true;
-}
-
-void ADay01::RunTestPart01(const TCHAR* FilePath)
-{
-	TArray<int32> Values;
-	bool bInitialised = InitTest(FilePath, Values);
-	if (!bInitialised)
-	{
-		return;
-	}
-
-	int32 ValueCount = Values.Num();
-	if (ValueCount <= 1)
+	if (Values.Num() <= 4)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed to read file '%s'!"), FilePath);
-		return;
 	}
+
+	return Values;
+}
+
+void ADay01::RunTestPart01(const TArray<int32>& Values)
+{
+	Terminal->Clear();
+	Counter->Reset();
+
+	int32 ValueCount = Values.Num();
 
 	int32 CurrentEntry = 0;
 	int32 PreviousValue = Values[0];
@@ -106,21 +96,12 @@ void ADay01::RunTestPart01(const TCHAR* FilePath)
 	}
 }
 
-void ADay01::RunTestPart02(const TCHAR* FilePath)
+void ADay01::RunTestPart02(const TArray<int32>& Values)
 {
-	TArray<int32> Values;
-	bool bInitialised = InitTest(FilePath, Values);
-	if (!bInitialised)
-	{
-		return;
-	}
+	Terminal->Clear();
+	Counter->Reset();
 
 	int32 ValueCount = Values.Num();
-	if (ValueCount <= 4)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to read file '%s'!"), FilePath);
-		return;
-	}
 
 	int32 CurrentEntry = 0;
 	int32 Previous = Values[0] + Values[1] + Values[2];
