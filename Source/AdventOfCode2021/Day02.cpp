@@ -1,6 +1,3 @@
-
-
-
 #include "Day02.h"
 
 #include "PushButton.h"
@@ -19,10 +16,6 @@ ADay02::ADay02() :
 void ADay02::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InitPushButtons();
-	InitTerminal(Terminal);
-	InitCounter(Counter);
 
 	SampleProgram = LoadProgram(TEXT("Data/Day02/Test01.txt"));
 	InputProgram = LoadProgram(TEXT("Data/Day02/Input01.txt"));
@@ -46,14 +39,6 @@ void ADay02::OnPart02TestButtonPushed()
 void ADay02::OnPart02ButtonPushed()
 {
 	RunTestPart02(InputProgram);
-}
-
-void ADay02::InitPushButtons()
-{
-	InitPushButton(Part01TestButton, FName(TEXT("OnPart01TestButtonPushed")));
-	InitPushButton(Part01Button, FName(TEXT("OnPart01ButtonPushed")));
-	InitPushButton(Part02TestButton, FName(TEXT("OnPart02TestButtonPushed")));
-	InitPushButton(Part02Button, FName(TEXT("OnPart02ButtonPushed")));
 }
 
 const TCHAR* ADay02::InstructionToName(EDay02Instruction Instruction)

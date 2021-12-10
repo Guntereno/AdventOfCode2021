@@ -15,6 +15,10 @@ ADay::ADay()
 void ADay::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InitPushButtons();
+	InitTerminal();
+	InitCounter();
 }
 
 // Called every frame
@@ -35,7 +39,17 @@ void ADay::InitPushButton(APushButton* PushButton, FName CallbackName)
 	PushButton->ButtonPushed.BindUFunction(this, CallbackName);
 }
 
-void ADay::InitTerminal(ATerminal* Terminal)
+
+void ADay::InitPushButtons()
+{
+	InitPushButton(Part01TestButton, FName(TEXT("OnPart01TestButtonPushed")));
+	InitPushButton(Part01Button, FName(TEXT("OnPart01ButtonPushed")));
+	InitPushButton(Part02TestButton, FName(TEXT("OnPart02TestButtonPushed")));
+	InitPushButton(Part02Button, FName(TEXT("OnPart02ButtonPushed")));
+}
+
+
+void ADay::InitTerminal()
 {
 	if (Terminal == nullptr)
 	{
@@ -46,7 +60,7 @@ void ADay::InitTerminal(ATerminal* Terminal)
 	Terminal->Clear();
 }
 
-void ADay::InitCounter(class ACounter* Counter)
+void ADay::InitCounter()
 {
 	if (Counter == nullptr)
 	{

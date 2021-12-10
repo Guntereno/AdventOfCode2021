@@ -19,10 +19,6 @@ ADay01::ADay01():
 void ADay01::BeginPlay()
 {
 	Super::BeginPlay();
-
-	InitPushButtons();
-	InitTerminal(Terminal);
-	InitCounter(Counter);
 }
 
 void ADay01::OnPart01TestButtonPushed()
@@ -47,14 +43,6 @@ void ADay01::OnPart02ButtonPushed()
 {
 	const FString InputPath = GetAssetPath(TEXT("Data/Day01/Part01.txt"));
 	RunTestPart02(*InputPath);
-}
-
-void ADay01::InitPushButtons()
-{
-	InitPushButton(Part01TestButton, FName(TEXT("OnPart01TestButtonPushed")));
-	InitPushButton(Part01Button, FName(TEXT("OnPart01ButtonPushed")));
-	InitPushButton(Part02TestButton, FName(TEXT("OnPart02TestButtonPushed")));
-	InitPushButton(Part02Button, FName(TEXT("OnPart02ButtonPushed")));
 }
 
 bool ADay01::InitTest(const TCHAR* FilePath, TArray<int32>& Values)
