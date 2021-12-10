@@ -25,6 +25,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
 	void MoveForward(float Value);
 	void MoveRight(float Value);
 	void Yaw(float Value);
@@ -32,7 +33,18 @@ protected:
 	void AddControllerYawInput(float Value);
 	void AddControllerPitchInput(float Value);
 
-private:
+	void Interact();
+	void StopInteracting();
+	void TickInteraction();
+
+	void GetRay(FVector& Origin, FVector& Target) const;
+	bool GetFirstActorInReach(FHitResult& HitResult) const;
+	bool GetFirstActorInReach(
+		const FVector& RayOrigin,
+		const FVector& RayTarget,
+		FHitResult& HitResult) const;
+	AActor* GetFirstInteractableInReach() const;
+
 	UPROPERTY(
 		VisibleAnywhere,
 		BlueprintReadOnly,
@@ -46,4 +58,14 @@ private:
 		Category = Camera,
 		meta = (AllowPrivateAccess = "true"))
 		float YawRate; // Degrees per second
+
+	UPROPERTY(
+		VisibleAnywhere,
+		BlueprintReadOnly,
+		Category = Camera,
+		meta = (AllowPrivateAccess = "true"))
+		float Reach;
+
+	UPROPERTY()
+		class AActor* CurrentInteractable;
 };
