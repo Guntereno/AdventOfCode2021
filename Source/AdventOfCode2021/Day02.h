@@ -48,9 +48,9 @@ private:
 	static void RunCommandPart01(const FDay02Command& Command, FIntPoint& Point);
 	static void RunCommandPart02(const FDay02Command& Command, FIntPoint& Point, int32& Aim);
 	
-	bool InitTest(const TCHAR* FilePath, TArray<FDay02Command>& Program);
-	void RunTestPart01(const TCHAR* FilePath);
-	void RunTestPart02(const TCHAR* FilePath);
+	bool InitTest();
+	void RunTestPart01(const TArray<FDay02Command>& Program);
+	void RunTestPart02(const TArray<FDay02Command>& Program);
 
 	UFUNCTION()
 		void OnPart01TestButtonPushed();
@@ -105,4 +105,10 @@ private:
 		Category = Puzzle,
 		meta = (AllowPrivateAccess = "true"))
 		class ACounter* Counter;
+
+	UPROPERTY()
+		TArray<FDay02Command> SampleProgram;
+
+	UPROPERTY()
+		TArray<FDay02Command> InputProgram;
 };

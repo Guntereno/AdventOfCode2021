@@ -23,30 +23,29 @@ void ADay02::BeginPlay()
 	InitPushButtons();
 	InitTerminal(Terminal);
 	InitCounter(Counter);
+
+	SampleProgram = LoadProgram(TEXT("Data/Day02/Test01.txt"));
+	InputProgram = LoadProgram(TEXT("Data/Day02/Input01.txt"));
 }
 
 void ADay02::OnPart01TestButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day02/Test01.txt"));
-	RunTestPart01(*InputPath);
+	RunTestPart01(SampleProgram);
 }
 
 void ADay02::OnPart01ButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day02/Input01.txt"));
-	RunTestPart01(*InputPath);
+	RunTestPart01(InputProgram);
 }
 
 void ADay02::OnPart02TestButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day02/Test01.txt"));
-	RunTestPart02(*InputPath);
+	RunTestPart02(SampleProgram);
 }
 
 void ADay02::OnPart02ButtonPushed()
 {
-	const FString InputPath = GetAssetPath(TEXT("Data/Day02/Input01.txt"));
-	RunTestPart02(*InputPath);
+	RunTestPart02(InputProgram);
 }
 
 void ADay02::InitPushButtons()
@@ -118,14 +117,22 @@ FDay02Command ADay02::ParseLine(const FString& Line)
 
 TArray<FDay02Command> ADay02::LoadProgram(const TCHAR* FilePath)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Loading file '%s'."), FilePath);
+	FString FullPath = GetAssetPath(FilePath);
+
+	UE_LOG(LogTemp, Display, TEXT("Loading file '%s'."), *FullPath);
 	TArray<FString> Lines;
-	FFileHelper::LoadFileToStringArray(Lines, FilePath);
+	FFileHelper::LoadFileToStringArray(Lines, *FullPath);
 
 	TArray<FDay02Command> Program;
 	for (FString Line : Lines)
 	{
-		Program.Emplace(ParseLine(Line));
+		FDay02Command Command = ParseLine(Line);
+		if (Command.Instruction == EDay02Instruction::Invalid)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Failed to load program at '%s'!"), FilePath);
+			return Program;
+		}
+		Program.Emplace(Command);
 	}
 
 	return Program;
@@ -190,7 +197,7 @@ void ADay02::RunCommandPart02(const FDay02Command& Command, FIntPoint& Point, in
 	}
 }
 
-bool ADay02::InitTest(const TCHAR* FilePath, TArray<FDay02Command>& Program)
+bool ADay02::InitTest()
 {
 	if ((Terminal == nullptr) || (Counter == nullptr))
 	{
@@ -200,17 +207,13 @@ bool ADay02::InitTest(const TCHAR* FilePath, TArray<FDay02Command>& Program)
 	Terminal->Clear();
 	Counter->Reset();
 
-	Program = LoadProgram(FilePath);
-
 	return true;
 }
 
-void ADay02::RunTestPart01(const TCHAR* FilePath)
+void ADay02::RunTestPart01(const TArray<FDay02Command>& Program)
 {
-	TArray<FDay02Command> Program;
-	if (!InitTest(FilePath, Program))
+	if (!InitTest())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to load program at '%s'!"), FilePath);
 		return;
 	}
 
@@ -231,12 +234,10 @@ void ADay02::RunTestPart01(const TCHAR* FilePath)
 	Counter->Set(Pos.X * Pos.Y);
 }
 
-void ADay02::RunTestPart02(const TCHAR* FilePath)
+void ADay02::RunTestPart02(const TArray<FDay02Command>& Program)
 {
-	TArray<FDay02Command> Program;
-	if (!InitTest(FilePath, Program))
+	if (!InitTest())
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to load program at '%s'!"), FilePath);
 		return;
 	}
 
